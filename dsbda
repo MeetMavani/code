@@ -1,0 +1,230 @@
+ass 1 
+import pandas as pd
+import numpy as np
+data = pd.read_csv('vehicles.csv')
+data.head()
+data.tail()
+data.isnull().sum()
+data.describe()
+data.info()
+data.shape
+# Data Formatting and Data Normalization
+# Summarize the types of variables
+data.dtypes
+# Convert categorical variables into quantitative variables using
+one-hot encoding
+categorical_cols = ['state'] # Replace 'state' with actual categorical
+columns
+data_encoded = pd.get_dummies(data, columns=categorical_cols)
+# Display the modified dataframe
+data_encoded.head()
+
+
+ass2
+import pandas as pd
+import numpy as np
+# Read the dataset
+df = pd.read_csv("StudentsPerformance.csv")
+# Objective a: Handling missing values
+# Check for missing values
+print("Missing Values:")
+print(df.isnull().sum())
+# Drop rows with missing values
+df.dropna(inplace=True)
+# Objective b: Handling outliers
+# Visualize distribution and identify outliers
+df.boxplot(column=["math score"])
+# Identify outliers using IQR method
+Q1 = df["math score"].quantile(0.25)
+Q3 = df["math score"].quantile(0.75)
+IQR = Q3 - Q1
+outliers = df[(df["math score"] < (Q1 - 1.5 * IQR)) | (df["math score"]
+> (Q3 + 1.5 * IQR))]
+print("Outliers:")
+print(outliers)
+# Remove outliers
+df = df[(df["math score"] >= (Q1 - 1.5 * IQR)) & (df["math score"] <=
+(Q3 + 1.5 * IQR))]
+# Objective c: Data transformation
+# Apply logarithmic transformation to 'math score' column
+df["math score"] = np.log1p(df["math score"]) # Using np.log1p to
+avoid issues with zero values
+# Visualize transformed distribution
+df.boxplot(column=["math score"])
+# Final cleaned dataset
+print("Final dataset after cleaning:")
+print(df)
+```
+
+
+Practical 3
+import pandas as pd
+import numpy as np
+data = pd.read_csv('toy_dataset.csv')
+data.head()
+data.tail()
+data.columns
+data1 = data.iloc[0:51, 3:5]
+data1
+data1.mean()
+data1.median()
+data1.min()
+data1.max()
+data1.std()
+data1.var()
+import pandas as pd
+data1 = pd.read_csv('iris.csv')
+data1.head()
+setosa = data1['class'] == 'Iris-setosa'
+print(data1[setosa].describe())
+versicolor = data1['class'] == 'Iris-versicolor'
+print(data1[versicolor].describe())
+virginica = data1['class'] == 'Iris-virginica'
+print(data1[virginica].describe())
+setosa.mean()
+versicolor.mean()
+virginica.mean()
+setosa.std()
+versicolor.std()
+virginica.std()
+
+
+Practical 4
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+# Read the dataset
+df = pd.read_csv("BostonHousing.csv")
+# Display the dataset
+print(df)
+# Get column names
+print(df.columns)
+# Select features (all columns except 'medv') and target variable ('medv')
+x = df.drop(columns=['medv'])
+y = df["medv"]
+# Split the dataset into training and testing sets
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25,
+random_state=49)
+# Create a Linear Regression model
+model = LinearRegression()
+# Fit the model on the training data
+model.fit(x_train, y_train)
+# Make predictions on the testing data
+y_pred = model.predict(x_test)
+# Compute the coefficient of determination (R^2) for both training and
+testing sets
+train_score = model.score(x_train, y_train)
+test_score = model.score(x_test, y_test)
+# Compute the mean squared error (MSE) between the actual and predicted
+values
+mse = mean_squared_error(y_test, y_pred)
+# Print the predicted values, R^2 scores, and MSE
+print("Predicted values:")
+print(y_pred)
+print("R^2 score on training set:", train_score)
+print("R^2 score on testing set:", test_score)
+print("Mean Squared Error:", mse)
+
+
+Practical 5
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score,
+precision_score, recall_score
+# Read the dataset
+df = pd.read_csv("Social_Network_ads.csv")
+# Preprocess 'Gender' column (if needed)
+df['Gender'].replace({"Male": 0, "Female": 1}, inplace=True)
+# Select features and target variable
+x = df.drop(columns=['Purchased']) # Select all columns except 'Purchased' as
+features
+y = df['Purchased'] # Select 'Purchased' as target variable
+# Split the dataset into training and testing sets
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25,
+random_state=34)
+# Create a Logistic Regression model
+model = LogisticRegression()
+# Fit the model on the training data
+model.fit(x_train, y_train)
+# Make predictions on the testing data
+y_predict = model.predict(x_test)
+# Compute the confusion matrix
+cm = confusion_matrix(y_test, y_predict)
+# Extract values from confusion matrix
+tn, fp, fn, tp = cm.ravel()
+# Compute and print various performance metrics
+accuracy = accuracy_score(y_test, y_predict)
+error_rate = 1 - accuracy
+precision = precision_score(y_test, y_predict)
+recall = recall_score(y_test, y_predict)
+# Print results
+print("Confusion Matrix:")
+print(cm)
+print("True Negatives:", tn)
+print("False Positives:", fp)
+print("False Negatives:", fn)
+print("True Positives:", tp)
+print("Accuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)
+
+
+Practical 8
+import seaborn as sns
+# Load the Titanic dataset
+titanic = sns.load_dataset('titanic')
+# Plot a histogram to visualize the distribution of ticket prices (fare)
+sns.histplot(titanic['fare'], bins=20, kde=True)
+plt.title('Distribution of Ticket Prices (Fare)')
+plt.xlabel('Fare')
+plt.ylabel('Frequency')
+plt.show()
+
+
+Practical 9
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+# Load the Titanic dataset
+data = pd.read_csv('titanic_train.csv')
+# Set the size of the plot
+plt.figure(figsize=(10, 6))
+# Plot a box plot for age distribution with respect to each gender
+and survival status
+sns.boxplot(x='Sex', y='Age', hue='Survived', data=data,
+palette='Set3')
+# Add title and labels
+plt.title('Age Distribution by Gender and Survival Status')
+plt.xlabel('Gender')
+plt.ylabel('Age')
+# Add legend
+plt.legend(title='Survived', loc='upper right', labels=['No', 'Yes'])
+# Show the plot
+plt.show()
+
+
+Practical 10
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+# Load the Iris dataset
+data = pd.read_csv('iris.csv')
+# Create histograms for each feature
+fig, axes = plt.subplots(2, 2, figsize=(16, 9))
+sns.histplot(data['sepallength'], ax=axes[0, 0])
+sns.histplot(data['sepalwidth'], ax=axes[0, 1])
+sns.histplot(data['petallength'], ax=axes[1, 0])
+sns.histplot(data['petalwidth'], ax=axes[1, 1])
+plt.show()
+# Create boxplots for each feature grouped by class
+fig, axes = plt.subplots(2, 2, figsize=(16, 9))
+sns.boxplot(y='petallength', x='class', data=data, ax=axes[0, 0])
+sns.boxplot(y='petalwidth', x='class', data=data, ax=axes[0, 1])
+sns.boxplot(y='sepallength', x='class', data=data, ax=axes[1, 0])
+sns.boxplot(y='sepalwidth', x='class', data=data, ax=axes[1, 1])
+plt.show()

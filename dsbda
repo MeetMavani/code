@@ -173,6 +173,336 @@ print("Error Rate:", error_rate)
 print("Precision:", precision)
 print("Recall:", recall)
 
+prac 6
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+df=pd.read_csv("iris.csv")
+df
+
+
+# In[2]:
+
+
+df.dtypes
+
+
+# In[3]:
+
+
+df['class']=df['class'].astype('category')
+df.dtypes
+
+
+# In[4]:
+
+
+df['class']=df['class'].cat.codes
+df
+
+
+# In[5]:
+
+
+df.isnull().sum()
+
+
+# In[6]:
+
+
+(df <= 0).sum()
+
+
+# In[7]:
+
+
+print(df.shape)
+
+
+# In[8]:
+
+
+# co-relation matrix
+def DetectOutlier(df,var):
+ Q1 = df[var].quantile(0.25)
+ Q3 = df[var].quantile(0.75)
+ IQR = Q3 - Q1
+ high, low = Q3+1.5*IQR, Q1-1.5*IQR
+
+ print("Highest allowed in variable:", var, high)
+ print("lowest allowed in variable:", var, low)
+
+ count = df[(df[var] > high) | (df[var] < low)][var].count()
+ print('Total outliers in:',var,':',count)
+DetectOutlier(df,'sepallength')
+DetectOutlier(df,'sepalwidth')
+DetectOutlier(df,'petallength')
+DetectOutlier(df,'petalwidth')
+
+
+# In[9]:
+
+
+import seaborn as sns
+sns.boxplot(df['sepalwidth'])
+
+
+# In[10]:
+
+
+def OutlierRemoval(df,var):
+ Q1 = df[var].quantile(0.25)
+ Q3 = df[var].quantile(0.75)
+ IQR = Q3 - Q1
+ high, low = Q3+1.5*IQR, Q1-1.5*IQR
+
+ print("Highest allowed in variable:", var, high)
+ print("lowest allowed in variable:", var, low)
+
+ count = df[(df[var] > high) | (df[var] < low)][var].count()
+
+ print('Total outliers in:',var,':',count)
+
+ df = df[((df[var] >= low) & (df[var] <= high))]
+ return df
+print(df.shape)
+df = OutlierRemoval(df,'sepalwidth')
+print(df.shape)
+
+
+# In[11]:
+
+
+import seaborn as sns
+sns.heatmap(df.corr(),annot=True)
+
+
+# In[13]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+# split the data into inputs and outputs
+X = df.iloc[:, [0,2,3]].values
+y = df.iloc[:, 4].values
+# training and testing data
+from sklearn.model_selection import train_test_split
+# assign test data size 25%
+X_train, X_test, y_train, y_test =train_test_split(X,y,test_size=
+0.25, random_state=0)
+# importing standard scaler
+from sklearn.preprocessing import StandardScaler
+# scalling the input data
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.fit_transform(X_test)
+# importing standard scaler
+from sklearn.preprocessing import StandardScaler
+# scalling the input data
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.fit_transform(X_test)
+# import Gaussian Naive Bayes classifier
+from sklearn.naive_bayes import GaussianNB
+# create a Gaussian Classifier
+classifer1 = GaussianNB()
+# training the model
+classifer1.fit(X_train, y_train)
+# testing the model
+y_pred1 = classifer1.predict(X_test)
+# importing accuracy score
+from sklearn.metrics import accuracy_score
+# printing the accuracy of the model
+print(accuracy_score(y_test,y_pred1))
+0.8648648648648649
+# importing the required modules
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+# passing actual and predicted values
+cm = confusion_matrix(y_test, y_pred1)
+# true write data values in each cell of the matrix
+sns.heatmap(cm, annot=True)
+plt.savefig('confusion.png')
+
+
+# In[14]:
+
+
+# importing classification report
+from sklearn.metrics import classification_report
+# printing the report
+print(classification_report(y_test, y_pred1))
+
+prac 7
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+df=pd.read_csv("iris.csv")
+df
+
+
+# In[2]:
+
+
+df.dtypes
+
+
+# In[3]:
+
+
+df['class']=df['class'].astype('category')
+df.dtypes
+
+
+# In[4]:
+
+
+df['class']=df['class'].cat.codes
+df
+
+
+# In[5]:
+
+
+df.isnull().sum()
+
+
+# In[6]:
+
+
+(df <= 0).sum()
+
+
+# In[7]:
+
+
+print(df.shape)
+
+
+# In[8]:
+
+
+# co-relation matrix
+def DetectOutlier(df,var):
+ Q1 = df[var].quantile(0.25)
+ Q3 = df[var].quantile(0.75)
+ IQR = Q3 - Q1
+ high, low = Q3+1.5*IQR, Q1-1.5*IQR
+
+ print("Highest allowed in variable:", var, high)
+ print("lowest allowed in variable:", var, low)
+
+ count = df[(df[var] > high) | (df[var] < low)][var].count()
+ print('Total outliers in:',var,':',count)
+DetectOutlier(df,'sepallength')
+DetectOutlier(df,'sepalwidth')
+DetectOutlier(df,'petallength')
+DetectOutlier(df,'petalwidth')
+
+
+# In[9]:
+
+
+import seaborn as sns
+sns.boxplot(df['sepalwidth'])
+
+
+# In[10]:
+
+
+def OutlierRemoval(df,var):
+ Q1 = df[var].quantile(0.25)
+ Q3 = df[var].quantile(0.75)
+ IQR = Q3 - Q1
+ high, low = Q3+1.5*IQR, Q1-1.5*IQR
+
+ print("Highest allowed in variable:", var, high)
+ print("lowest allowed in variable:", var, low)
+
+ count = df[(df[var] > high) | (df[var] < low)][var].count()
+
+ print('Total outliers in:',var,':',count)
+
+ df = df[((df[var] >= low) & (df[var] <= high))]
+ return df
+print(df.shape)
+df = OutlierRemoval(df,'sepalwidth')
+print(df.shape)
+
+
+# In[11]:
+
+
+import seaborn as sns
+sns.heatmap(df.corr(),annot=True)
+
+
+# In[13]:
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+# split the data into inputs and outputs
+X = df.iloc[:, [0,2,3]].values
+y = df.iloc[:, 4].values
+# training and testing data
+from sklearn.model_selection import train_test_split
+# assign test data size 25%
+X_train, X_test, y_train, y_test =train_test_split(X,y,test_size=
+0.25, random_state=0)
+# importing standard scaler
+from sklearn.preprocessing import StandardScaler
+# scalling the input data
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.fit_transform(X_test)
+# importing standard scaler
+from sklearn.preprocessing import StandardScaler
+# scalling the input data
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.fit_transform(X_test)
+# import Gaussian Naive Bayes classifier
+from sklearn.naive_bayes import GaussianNB
+# create a Gaussian Classifier
+classifer1 = GaussianNB()
+# training the model
+classifer1.fit(X_train, y_train)
+# testing the model
+y_pred1 = classifer1.predict(X_test)
+# importing accuracy score
+from sklearn.metrics import accuracy_score
+# printing the accuracy of the model
+print(accuracy_score(y_test,y_pred1))
+0.8648648648648649
+# importing the required modules
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+# passing actual and predicted values
+cm = confusion_matrix(y_test, y_pred1)
+# true write data values in each cell of the matrix
+sns.heatmap(cm, annot=True)
+plt.savefig('confusion.png')
+
+# importing classification report
+from sklearn.metrics import classification_report
+# printing the report
+print(classification_report(y_test, y_pred1))
+
 
 Practical 8
 import seaborn as sns
